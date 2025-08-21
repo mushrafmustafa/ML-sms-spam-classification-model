@@ -24,18 +24,15 @@ DEMO_MESSAGES = [
     "Hey, are we still meeting up for lunch today?",
     "Urgent! Your account has been compromised. Verify your details here: www.fakebank.com/verify",
     "Reminder: Your appointment is scheduled for tomorrow at 10am.",
-    "Howdy! How r u? How is your day? Please let me know about you personally. I hope you won't be against that :)) I am blond. My eyes 're blue. I 'm hundred sixty-eight centimeters tall. I 'm slender. I am very good-natured and I love to speak to interesting people. I have a great deal of acquaintances but still I prefer spending time with me close pals.Occasionally. I 'm really sentimental and I think that I 'm a hopeful lady. Write me on my email address: Aidan068a@hotmail.com",
-    "Urgent! Your account has been compromised. Verify your details here: www.fakebank.com/verify",
-    "Reminder: Your appointment is scheduled for tomorrow at 10am.",
-]
+ ]
 
 def main():
-    # Set up argument parser
+    #arguments
     parser = argparse.ArgumentParser(description="Classify SMS messages as spam or not-spam using a trained model.")
     parser.add_argument("-m", "--messages", nargs="*", help="Messages to classify (use // to separate multiple messages). If not provided, runs demo messages.")
     args = parser.parse_args()
 
-    # Load the trained model
+    #Load model
     model_filename = "spam_detection_model.joblib"
     try:
         loaded_model = joblib.load(model_filename)
@@ -43,9 +40,8 @@ def main():
         print(f"Error: Model file '{model_filename}' not found. Please ensure the model is in the same directory.")
         return
 
-    # Determine messages to process
     if args.messages:
-        # Join arguments until a separator (//) is found, or take all as one message
+     
         messages = []
         current_message = []
         for arg in args.messages:
@@ -60,14 +56,11 @@ def main():
     else:
         messages = DEMO_MESSAGES
 
-    # Preprocess all messages
+  
     processed_messages = [preprocess_message(msg) for msg in messages]
-
-    # Make predictions and get probabilities
-    predictions = loaded_model.predict(processed_messages)
+  predictions = loaded_model.predict(processed_messages)
     prediction_probabilities = loaded_model.predict_proba(processed_messages)
 
-    # Display predictions
     for i, msg in enumerate(messages):
         prediction = "Spam" if predictions[i] == 1 else "Not-Spam"
         spam_probability = prediction_probabilities[i][1]
